@@ -1,6 +1,6 @@
 import { File } from 'gulp-util';
 import { basename, relative, resolve } from 'path';
-const Transform = require('readable-stream/transform');
+const Transform = require('readable-stream').Transform;
 
 /** 解析所有文件的moduleID, 生成config后插到入口文件的头部 */
 export function addRequireConfig (option: OptionType) {
@@ -12,7 +12,6 @@ export function addRequireConfig (option: OptionType) {
         // 从每个文件中读取moduleId, 保存到pathConfig对象中。
         transform: (file: File, enc, callback) => {
             const fileName = basename(file.path);
-            // 主入口定义的moduleId不需要写到config里面
             if (fileName !== mainJs) {
                 const relativePath = relative(option.sourceDir, file.path);
                 const touchModuleId = file.contents.toString().match(/define\(["']([0-9a-zA-Z@_\-/]+)["']/g);
